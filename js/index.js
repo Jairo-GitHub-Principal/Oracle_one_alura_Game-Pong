@@ -53,19 +53,48 @@ const velocidadeMaxima = 20; // Ajuste conforme necessário
 
 // Função para desenhar as bordas superior e inferior
 function desenharBordas() {
-    ctx.strokeStyle = 'blue'; // Cor das bordas
+    ctx.strokeStyle = 'yellow'; // Cor das bordas
     ctx.lineWidth = 5; // Largura da borda
 
     // Desenhar borda superior
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, 0);
+    ctx.moveTo(0, 0);// define o ponto 0 do eixo X (horizontal) e 0 do eixo Y(vertical) e posiciona o inicio de onde parte a linha do desenho
+                    // obs.: imagina que vc  tem um lapis, o (0,0) é onde vc colocou seu laps pra comessar a desenhar
+    ctx.lineTo(canvas.width,0); // aqui partindo da posição de onde vc colocou seu laps pra comessar a desenhar, vc estica uma linha reta, no sentido horizontal
+                                // do tamanho da largura do canvas, por isso usamos a propriedade canvas.width,note:
+                                // que a orderm é importante, (canvas.width,0) primeiro vem o tamanho da linha que sera desenhada, 
+                                // e depois a distancia que  esla esta da borda do canvas, no nosso caso 0 ficou a borda que criamos 
+                                // ficou colada com a borda do canvas    
+    ctx.stroke(); // depois de definis locais e valores das propriedades o stroker faz o desenho
+
+    // desenha a borda lateral esquerda
+    ctx.beginPath();
+    ctx.moveTo(0,0);// aqui se repete como no codigo da borde desenhada acima 
+    ctx.lineTo(0,canvas.height);//obs: pra desenhar a borda lateral é diferente da borda superior:
+                                // primeiro definimos a distancis entre a borda do canvas e a linha que vamos desenhar
+                                // depois definimos o tamanho da linha no eixo y nesse caso a altura do canvas
     ctx.stroke();
 
     // Desenhar borda inferior
     ctx.beginPath();
     ctx.moveTo(0, canvas.height);
     ctx.lineTo(canvas.width, canvas.height);
+    ctx.stroke();
+
+    
+    // desenha a borda lateral direita
+    ctx.beginPath();
+    ctx.moveTo(canvas.width,canvas.height);/** aqui nos definimos o ponto de partida do desenho, o canvas.whidth
+                                                posiciona o ponto de partida no final do comprimento do exio X
+                                                se do lado exquerdo a posição inicial == 0, a posição final é == a canvas.whidth                                                
+                                                e o canvas.height define a posição inicial no eixo y , assim como pra desenhar 
+                                                a borda superios , usamos as cordenadas 0x,0y, agora usamos canvas.width x e canvas.height y
+                                                assim definimos o ponto de partida do desenho, no lado direito do canvas, con o sentido do desenho
+                                                 partindo da part inferios do retangulo do canvas para cima
+    */                                             
+    ctx.lineTo(canvas.width,0);/** aqui é onde iremos iniciar o nosso traçado da nossa borda, determinamos então que partira do 
+                                ponto x = canvas.width e se extendera até a posição 0,do eixo y que é == canvas.height
+                                */
     ctx.stroke();
 }
 
