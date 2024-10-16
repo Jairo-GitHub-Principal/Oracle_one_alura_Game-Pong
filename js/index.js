@@ -29,10 +29,12 @@ canvas.width = 1200;  // Largura interna
 canvas.height = 600; // Altura interna 
 
 // Configurações iniciais
-const larguraRaquete = 30;
+const larguraRaquete = 40;
 const alturaRaqueteJogador = 300; // Altura da raquete do jogador
 const alturaRaqueteComputador = 300; // Altura da raquete do computador
-const tamanhoBola = 25;
+const tamanhoBola = 30;
+let anguloRotacao = 0;  // Ângulo de rotação da bola
+let velocidadeRotacao = 0.1;  // Velocidade de rotação 
 
 // Posição inicial das barras e da bola
 let posicaoJogadorY = (canvas.height - alturaRaqueteJogador) / 2;
@@ -49,7 +51,7 @@ let velocidadeBolaY = velocidadeInicialY;
 let incrementoVelocidade = 0.5;  // Incremento de velocidade a cada colisão
 
 // Defina um limite máximo para a velocidade da bola
-const velocidadeMaxima = 20; // Ajuste conforme necessário
+const velocidadeMaxima = 7; // Ajuste conforme necessário
 
 // Função para desenhar as bordas superior e inferior
 function desenharBordas() {
@@ -105,19 +107,34 @@ function desenharRaqueteJogador() {
 
 // Função para desenhar a raquete do computador
 function desenharRaqueteComputador() {
-    ctx.drawImage(imagemRaqueteComputador, canvas.width - 40, posicaoComputadorY, larguraRaquete, alturaRaqueteComputador);
+    ctx.drawImage(imagemRaqueteComputador, canvas.width - 80, posicaoComputadorY, larguraRaquete, alturaRaqueteComputador);
 }
 
 // Função para desenhar a bola
 function desenharBola() {
-    ctx.drawImage(bolaPong, posicaoBolaX - (tamanhoBola / 2), posicaoBolaY - (tamanhoBola / 2), tamanhoBola, tamanhoBola);
     
-    // Se quiser adicionar um contorno, crie um círculo sobre a bola
-    ctx.beginPath();
-    ctx.arc(posicaoBolaX, posicaoBolaY, tamanhoBola / 2, 0, Math.PI * 2); // Desenhe um círculo
-    ctx.strokeStyle = 'orange'; // Define a cor do contorno
-    ctx.lineWidth = 2; // Aumenta a largura do contorno
-    ctx.stroke(); // Desenha o contorno
+//     ctx.drawImage(bolaPong, posicaoBolaX - (tamanhoBola / 2), posicaoBolaY - (tamanhoBola / 2), tamanhoBola, tamanhoBola);
+    
+//     // Se quiser adicionar um contorno, crie um círculo sobre a bola
+//     ctx.beginPath();
+//     ctx.arc(posicaoBolaX, posicaoBolaY, tamanhoBola / 2, 0, Math.PI * 8); // Desenhe um círculo
+//     ctx.strokeStyle = 'orange'; // Define a cor do contorno
+//     ctx.lineWidth = 2; // Aumenta a largura do contorno
+//     ctx.stroke(); // Desenha o contorno
+
+ctx.save();  // Salva o estado atual do contexto
+
+    // Translada o contexto para o centro da bola
+    ctx.translate(posicaoBolaX, posicaoBolaY);
+
+    // Aplica a rotação da bola
+    ctx.rotate(anguloRotacao);
+
+    // Desenha a bola rotacionada no centro do contexto
+    ctx.drawImage(bolaPong, -(tamanhoBola / 2), -(tamanhoBola / 2), tamanhoBola, tamanhoBola);
+
+    ctx.restore();  // Restaura o estado original do contexto
+
 }
 
 
@@ -126,17 +143,23 @@ function moverBola() {
     posicaoBolaX += velocidadeBolaX;
     posicaoBolaY += velocidadeBolaY;
 
+    // Atualiza a rotação da bola
+    anguloRotacao += velocidadeRotacao;
+
     // Colisão com as paredes superior e inferior
     if (posicaoBolaY + tamanhoBola / 2 > canvas.height || posicaoBolaY - tamanhoBola / 2 < 0) {
         velocidadeBolaY = -velocidadeBolaY; // Inverte a direção vertical
+        velocidadeRotacao *= -1 ;  // Inverte a rotação quando a bola toca nas paredes
+
     }
 
     // Verifica colisão com a barra do jogador
-    if (
-                posicaoBolaX - tamanhoBola / 2 < 40 &&
+    if (        
+                posicaoBolaX - tamanhoBola / 2 < larguraRaquete &&
                 posicaoBolaY > posicaoJogadorY &&
                 posicaoBolaY < posicaoJogadorY + alturaRaqueteJogador
             ) {
+                
                 const parteRaquete = (posicaoBolaY - posicaoJogadorY) / alturaRaqueteJogador;
         
                 // Define um ângulo de impacto com base na parte da raquete atingida
