@@ -7,6 +7,21 @@
   <link rel="styleSheet"; type="text/css"; href="./css/index.css";>
 </head>
 <body>
+  <div class="container__button">
+    
+    <button id="btn-play" class="btn__pause" onclick="playerGame()">Player</button>
+   
+    <button id="btn-pausar" class="btn__pause" onclick="pausarGame()">Pausar</button>
+    <div id="placar" class="container__placar">
+      <p>Player: <span class="p__player" id="pontos-jogador">0</span></p>
+      <p>Computador: <span class="p__player" id="pontos-computador">0</span></p>
+    </div>
+
+  
+</div>
+
+
+
     <canvas id="pongCanvas"></canvas>
     
   <script src="./js/index.js" ></script>
